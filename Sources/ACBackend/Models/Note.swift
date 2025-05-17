@@ -5,7 +5,7 @@ import struct Foundation.UUID
 /// It is recommended you write your model with sendability checking on and then suppress the warning
 /// afterwards with `@unchecked Sendable`.
 final class Note: Model, @unchecked Sendable {
-    static let schema = "todos"
+    static let schema = "notes"
     
     @ID
     var id: UUID?
