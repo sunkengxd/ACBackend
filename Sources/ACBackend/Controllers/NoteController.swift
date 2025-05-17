@@ -3,7 +3,7 @@ import Vapor
 
 struct NoteController: RouteCollection {
     func boot(routes: any RoutesBuilder) throws {
-        let notes = routes.grouped("notes")
+        let notes = routes.grouped("api", "notes")
 
         notes.get(use: self.index)
         notes.post(use: self.create)
