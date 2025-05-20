@@ -1,6 +1,6 @@
-import NIOSSL
 import Fluent
 import FluentPostgresDriver
+import NIOSSL
 import Vapor
 
 // configures your application
@@ -11,11 +11,15 @@ public func configure(_ app: Application) async throws {
     app.databases.use(
         .postgres(
             configuration: .init(
-                hostname: "localhost",
-                username: "vapor",
-                password: "vapor",
-                database: "vapor",
-                tls: .disable
+                hostname: Environment.get("DATABASE_HOST") ?? "localhost",
+                port: Environment.get("DATABASE_PORT").flatMap(Int.init(_:))
+                    ?? SQLPostgresConfiguration.ianaPortNumber,
+                username: Environment.get("DATABASE_USERNAME")
+                    ?? "vapor_username",
+                password: Environment.get("DATABASE_PASSWORD")
+                    ?? "vapor_password",
+                database: Environment.get("DATABASE_NAME") ?? "vapor_database",
+                tls: .prefer(try .init(configuration: .clientDefault))
             )
         ),
         as: .psql
