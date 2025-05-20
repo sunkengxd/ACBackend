@@ -1,6 +1,6 @@
 import NIOSSL
 import Fluent
-import FluentSQLiteDriver
+import FluentPostgresDriver
 import Vapor
 
 // configures your application
@@ -8,7 +8,18 @@ public func configure(_ app: Application) async throws {
     // uncomment to serve files from /Public folder
     // app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
 
-    app.databases.use(DatabaseConfigurationFactory.sqlite(.file("db.sqlite")), as: .sqlite)
+    app.databases.use(
+        .postgres(
+            configuration: .init(
+                hostname: "localhost",
+                username: "vapor",
+                password: "vapor",
+                database: "vapor",
+                tls: .disable
+            )
+        ),
+        as: .psql
+    )
 
     app.migrations.add(CreateNote())
 
